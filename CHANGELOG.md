@@ -1,3 +1,10 @@
+# 1.0.0 (2022-03-20)
+
+
+### Features
+
+* create selection zone ([53a77bd](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/53a77bdbfc509e35bf0c0123915f669ccaa29147))
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
