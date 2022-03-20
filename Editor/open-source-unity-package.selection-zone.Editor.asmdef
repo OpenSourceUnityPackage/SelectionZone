@@ -1,0 +1,10 @@
+{
+	"name": "open-source-unity-package.selection-zone.Editor",
+	"references": [
+		"open-source-unity-package.selection-zone.Runtime"
+	],
+	"includePlatforms": [
+		"Editor"
+	],
+	"excludePlatforms": []
+}

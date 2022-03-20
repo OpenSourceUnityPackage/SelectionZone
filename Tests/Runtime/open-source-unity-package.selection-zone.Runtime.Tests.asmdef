@@ -1,7 +1,7 @@
 {
-  "name": "[YourCompany].[YourPackageName].Tests",
+  "name": "open-source-unity-package.selection-zone.Tests",
   "references": [
-    "[YourCompany].[YourPackageName].Runtime"
+    "open-source-unity-package.selection-zone.Runtime"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

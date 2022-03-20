@@ -1,0 +1,12 @@
+{
+  "name": "open-source-unity-package.selection-zone.Editor.Tests",
+  "references": [
+    "open-source-unity-package.selection-zone.Editor",
+    "open-source-unity-package.selection-zone.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": []
+}
