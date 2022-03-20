@@ -23,6 +23,8 @@
 ## What is it ?
 Selection zone is a package based on [article](https://hyunkell.com/blog/rts-style-unit-selection-in-unity-5/) of Jeff Zimmer to select multiple entity in unity 3D.
 
+![image](https://user-images.githubusercontent.com/55276408/159162563-6f98255d-0657-44c6-be0b-9f760b45a95c.png)
+
 ## How to use ?
 To use it, create a base class for you entities that inheriting from interface ISelectable and define it's behaviour on entity is selected.
 ```C#
@@ -42,6 +44,7 @@ public class UnitSelection : UnitSelection<Unit>
 {
 }
 ```
+![image](https://user-images.githubusercontent.com/55276408/159162520-49d00271-cc5b-44b1-9956-afc3c90b0c87.png)
 
 You can now select your entities.
 
