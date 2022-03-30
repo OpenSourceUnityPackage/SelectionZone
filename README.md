@@ -33,7 +33,24 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour, ISelectable
 {
-  [...]
+    private bool m_isSelected = false;
+    private Material m_material;
+
+    protected void Awake()
+    {
+        m_material = GetComponent<Renderer>().material;
+    }
+
+    public void SetSelected(bool selected)
+    {
+        m_isSelected = selected;
+        m_material.color = m_isSelected ? Color.red : Color.white;
+    }
+    
+    public bool IsSelected()
+    {
+        return m_isSelected;
+    }
 }
 ```
 Next, you need define a script inheriting from UnitSelection<T> and replace T with your selectable entitie created above and include it in your scene.
