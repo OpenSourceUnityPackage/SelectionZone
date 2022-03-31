@@ -1,24 +1,24 @@
-using System;
 using System.Collections.Generic;
+using UnitSelectionPackage;
 using UnityEngine;
 
 public enum ETeam : int
 {
     Team1 = 0,
     Team2 = 1,
-    [InspectorName(null)]
-    TeamCount = 2
+    [InspectorName(null)] TeamCount = 2
 }
 
 public class GameManager : MonoBehaviour
 {
     public Camera camera;
-    private UnitSelection unitSelection = new UnitSelection();
-    private List<Unit>[] m_teamsUnits = new List<Unit>[(int)ETeam.TeamCount];
-    bool m_isSelecting = false;
-    
+    private UnitSelection<Unit> m_unitSelection = new UnitSelection<Unit>();
+    private List<Unit>[] m_teamsUnits = new List<Unit>[(int) ETeam.TeamCount];
+    private bool m_isSelecting;
+
     #region Singleton
-    protected static GameManager m_Instance = null;
+
+    private static GameManager m_Instance = null;
 
     public static GameManager Instance
     {
@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
                 m_Instance = FindObjectOfType<GameManager>();
                 if (m_Instance == null)
                 {
-                    // Create the Picking system
                     GameObject newObj = new GameObject("GameManager");
                     m_Instance = Instantiate(newObj).AddComponent<GameManager>();
                 }
@@ -38,13 +37,13 @@ public class GameManager : MonoBehaviour
             return m_Instance;
         }
     }
+
     #endregion
 
     #region MonoBehaviour
 
     private void Awake()
     {
-        unitSelection.camera = camera;
         for (var index = 0; index < m_teamsUnits.Length; index++)
         {
             m_teamsUnits[index] = new List<Unit>();
@@ -53,43 +52,40 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        unitSelection.SetObserver(m_teamsUnits[(int)ETeam.Team1]);
+        m_unitSelection.SetObserver(m_teamsUnits[(int) ETeam.Team1]);
     }
-    
-    void Update()
+
+    private void Update()
     {
-        // If we press the left mouse button, save mouse location and begin selection
         if (Input.GetMouseButtonDown(0))
         {
             if (!m_isSelecting)
             {
-                unitSelection.OnSelectionBegin(Input.mousePosition);
+                m_unitSelection.OnSelectionBegin(Input.mousePosition);
                 m_isSelecting = true;
             }
-
-            unitSelection.OnSelectionProcess(Input.mousePosition);
         }
 
         if (m_isSelecting)
         {
-            unitSelection.OnSelectionProcess(Input.mousePosition);
+            m_unitSelection.OnSelectionProcess(camera, Input.mousePosition);
         }
 
-        // If we let go of the left mouse button, end selection
         if (Input.GetMouseButtonUp(0))
         {
-            unitSelection.OnSelectionEnd();
+            m_unitSelection.OnSelectionEnd();
             m_isSelecting = false;
         }
     }
-    
-    void OnGUI()
+
+    private void OnGUI()
     {
         if (m_isSelecting)
         {
-            unitSelection.DrawGUI(Input.mousePosition);
+            m_unitSelection.DrawGUI(Input.mousePosition);
         }
     }
+
     #endregion
 
     /// <summary>
@@ -104,7 +100,7 @@ public class GameManager : MonoBehaviour
     /// <param name="team"></param>
     public void RegisterUnit(ETeam team, Unit unit)
     {
-        m_teamsUnits[(int)team].Add(unit);
+        m_teamsUnits[(int) team].Add(unit);
     }
 
     /// <summary>
@@ -120,6 +116,6 @@ public class GameManager : MonoBehaviour
     /// <param name="team"></param>
     public void UnregisterUnit(ETeam team, Unit unit)
     {
-        m_teamsUnits[(int)team].Remove(unit);
+        m_teamsUnits[(int) team].Remove(unit);
     }
 }
