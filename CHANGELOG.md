@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.0.0...1.1.0) (2022-03-31)
+
+
+### Features
+
+* v2 ([9943985](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/9943985a34e0877d3f479e2d77720792a3707f1e))
+
 # 1.0.0 (2022-03-20)
 
 
