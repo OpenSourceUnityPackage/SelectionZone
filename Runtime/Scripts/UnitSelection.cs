@@ -13,8 +13,7 @@ namespace UnitSelectionPackage
             public Color fillColor;
             public Color edgeColor; 
         }
-
-        public Camera camera;
+        
         public Style style = new Style
         {
             thickness = 2f,
@@ -22,8 +21,8 @@ namespace UnitSelectionPackage
             edgeColor = new Color(0.8f, 0.8f, 0.95f)
         };
         
-        Vector3 m_cursorPosition;
-        private List<T> m_observedSelectable;
+        private Vector3 m_cursorPosition;
+        private List<T> m_observedSelectable; // ref
         private List<T> m_selectedObj = new List<T>();
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace UnitSelectionPackage
             m_cursorPosition = cursorScreenPos;
         }
 
-        public void OnSelectionProcess(Vector3 cursorScreenPos)
+        public void OnSelectionProcess(Camera camera, Vector3 cursorScreenPos)
         {
             foreach (T unit in m_selectedObj)
             {
@@ -53,7 +52,7 @@ namespace UnitSelectionPackage
             m_selectedObj.Clear();
             foreach (T unit in m_observedSelectable)
             {
-                if (IsWithinSelectionBounds(unit.gameObject, cursorScreenPos))
+                if (IsWithinSelectionBounds(camera, unit.gameObject, cursorScreenPos))
                     m_selectedObj.Add(unit);
             }
 
@@ -81,7 +80,7 @@ namespace UnitSelectionPackage
             m_observedSelectable = bufferToObserve;
         }
         
-        public bool IsWithinSelectionBounds(GameObject gameObject, Vector3 cursorScreenPos)
+        public bool IsWithinSelectionBounds(Camera camera, GameObject gameObject, Vector3 cursorScreenPos)
         {
             Bounds viewportBounds =
                 Utils.GetViewportBounds(camera, m_cursorPosition, cursorScreenPos);
