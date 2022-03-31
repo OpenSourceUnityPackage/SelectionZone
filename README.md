@@ -21,20 +21,37 @@
 </p>
 
 ## What is it ?
-Selection zone is a package based on [article](https://hyunkell.com/blog/rts-style-unit-selection-in-unity-5/) of Jeff Zimmer to select multiple entity in unity 3D.
+Selection zone is a package that allow you to select multiple entity in unity 3D.
 
 ![image](https://user-images.githubusercontent.com/55276408/159162563-6f98255d-0657-44c6-be0b-9f760b45a95c.png)
+
+Its architecture is input based and online friendly.
+That mean that user need to supply input to the function to obtain an output.
+It allows user to define which input is used to select (mouse, joystick, advance input system...) and define which entities can be selected (sorted in team ? Only one type of entity ?...) depending on your project.
+
+This package is supply with a demo in sample that can be imported independently thanks to the unity package manager.
 
 ## How to use ?
 To use it, create a base class for you entities that inheriting from interface ISelectable and define it's behaviour on entity is selected.
 ```C#
-using EntSelect;
+using UnitSelectionPackage;
 using UnityEngine;
 
 public class Unit : MonoBehaviour, ISelectable
 {
     private bool m_isSelected = false;
     private Material m_material;
+
+    private void OnEnable()
+    {
+        GameManager.Instance.RegisterUnit(team, this);
+    }
+
+    private void OnDisable()
+    {
+        if(gameObject.scene.isLoaded)
+            GameManager.Instance.UnregisterUnit(team, this);
+    }
 
     protected void Awake()
     {
@@ -53,17 +70,97 @@ public class Unit : MonoBehaviour, ISelectable
     }
 }
 ```
-Next, you need define a script inheriting from UnitSelection<T> and replace T with your selectable entitie created above and include it in your scene.
-```C#
-using EntSelect;
 
-public class UnitSelection : UnitSelection<Unit> 
+Finally, you need to integrate it into your game logic. You need to call into your update and draw function and supply input to use (list of unit, cursor, camera to use)
+
+```C#
+using System.Collections.Generic;
+using UnitSelectionPackage;
+using UnityEngine;
+
+public enum ETeam : int
 {
+    Team1 = 0,
+    Team2 = 1,
+    [InspectorName(null)] TeamCount = 2
+}
+
+public class GameManager : MonoBehaviour
+{
+    public Camera camera;
+    private UnitSelection<Unit> m_unitSelection = new UnitSelection<Unit>();
+    private List<Unit>[] m_teamsUnits = new List<Unit>[(int) ETeam.TeamCount];
+    private bool m_isSelecting;
+
+    private static GameManager m_Instance = null;
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+            {
+                m_Instance = FindObjectOfType<GameManager>();
+                if (m_Instance == null)
+                {
+                    GameObject newObj = new GameObject("GameManager");
+                    m_Instance = Instantiate(newObj).AddComponent<GameManager>();
+                }
+            }
+
+            return m_Instance;
+        }
+    }
+
+    private void Awake()
+    {
+        for (var index = 0; index < m_teamsUnits.Length; index++)
+            m_teamsUnits[index] = new List<Unit>();
+    }
+
+    private void OnEnable()
+    {
+        m_unitSelection.SetObserver(m_teamsUnits[(int) ETeam.Team1]);
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (!m_isSelecting)
+            {
+                m_unitSelection.OnSelectionBegin(Input.mousePosition);
+                m_isSelecting = true;
+            }
+        }
+
+        if (m_isSelecting)
+            m_unitSelection.OnSelectionProcess(camera, Input.mousePosition);
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            m_unitSelection.OnSelectionEnd();
+            m_isSelecting = false;
+        }
+    }
+
+    private void OnGUI()
+    {
+        if (m_isSelecting)
+            m_unitSelection.DrawGUI(Input.mousePosition);
+    }
+
+    public void RegisterUnit(ETeam team, Unit unit)
+    {
+        m_teamsUnits[(int) team].Add(unit);
+    }
+
+    public void UnregisterUnit(ETeam team, Unit unit)
+    {
+        m_teamsUnits[(int) team].Remove(unit);
+    }
 }
 ```
-![image](https://user-images.githubusercontent.com/55276408/159162520-49d00271-cc5b-44b1-9956-afc3c90b0c87.png)
 
 You can now select your entities.
-
-You can change style of selection zone in Utils class
- 
+You can change the style of selection zone thanks to the style variable in "UnitSelection"
