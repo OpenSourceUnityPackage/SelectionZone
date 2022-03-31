@@ -1,4 +1,4 @@
-namespace EntSelect
+namespace UnitSelectionPackage
 {
     public interface ISelectable
     {

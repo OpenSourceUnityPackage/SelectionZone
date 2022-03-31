@@ -1,12 +1,10 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace EntSelect
+namespace UnitSelectionPackage
 {
-    /// <summary>
-    /// <see cref="https://hyunkell.com/blog/rts-style-unit-selection-in-unity-5/"/>
-    /// </summary>
-    public class UnitSelection<T> : MonoBehaviour
-        where T : MonoBehaviour, ISelectable
+    public class UnitSelection<T> where T : MonoBehaviour, ISelectable
     {
         [System.Serializable]
         public struct Style
@@ -24,63 +22,69 @@ namespace EntSelect
             edgeColor = new Color(0.8f, 0.8f, 0.95f)
         };
         
-        bool m_isSelecting = false;
-        Vector3 m_mousePosition1;
-        private T[] m_units;
+        Vector3 m_cursorPosition;
+        private List<T> m_observedSelectable;
+        private List<T> m_selectedObj = new List<T>();
+
+        /// <summary>
+        /// Is called on selection. i.e on cursor up after select objects
+        /// </summary>
+        public Action<List<T>> OnSelection;
         
-        
-        void Update()
+        /// <summary>
+        /// Is called on deselection. i.e when you select unit and click in other point
+        /// </summary>
+        public Action<List<T>> OnDeselection;
+
+        public void OnSelectionBegin(Vector3 cursorScreenPos)
         {
-            // If we press the left mouse button, save mouse location and begin selection
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (!m_isSelecting)
-                {
-                    m_units = FindObjectsOfType<T>();
-
-                    foreach (T unit in m_units)
-                    {
-                        unit.SetSelected(false);
-                    }
-                }
-
-                m_isSelecting = true;
-                m_mousePosition1 = Input.mousePosition;
-            }
-
-            if (m_isSelecting)
-            {
-                foreach (T unit in m_units)
-                {
-                    unit.SetSelected(IsWithinSelectionBounds(unit.gameObject));
-                }
-            }
-
-            // If we let go of the left mouse button, end selection
-            if (Input.GetMouseButtonUp(0))
-            {
-                m_isSelecting = false;
-            }
+            OnDeselection?.Invoke(m_selectedObj);
+            
+            m_cursorPosition = cursorScreenPos;
         }
 
-        void OnGUI()
+        public void OnSelectionProcess(Vector3 cursorScreenPos)
         {
-            if (m_isSelecting)
+            foreach (T unit in m_selectedObj)
             {
-                // Create a rect from both mouse positions
-                Rect rect = Utils.GetScreenRect(m_mousePosition1, Input.mousePosition);
-                Utils.DrawScreenRect(rect, style.fillColor);
-                Utils.DrawScreenRectBorder(rect, style.thickness, style.edgeColor);
+                unit.SetSelected(false);
+            }
+            
+            m_selectedObj.Clear();
+            foreach (T unit in m_observedSelectable)
+            {
+                if (IsWithinSelectionBounds(unit.gameObject, cursorScreenPos))
+                    m_selectedObj.Add(unit);
+            }
+
+            foreach (T unit in m_selectedObj)
+            {
+                unit.SetSelected(true);
             }
         }
-
-        public bool IsWithinSelectionBounds(GameObject gameObject)
+        
+        public void OnSelectionEnd()
         {
-            if (!m_isSelecting)
-                return false;
+            OnSelection?.Invoke(m_selectedObj);
+        }
 
+        public void DrawGUI(Vector3 cursorScreenPos)
+        {
+            // Create a rect from both cursor positions
+            Rect rect = Utils.GetScreenRect(m_cursorPosition, cursorScreenPos);
+            Utils.DrawScreenRect(rect, style.fillColor);
+            Utils.DrawScreenRectBorder(rect, style.thickness, style.edgeColor);
+        }
+
+        public void SetObserver(in List<T> bufferToObserve)
+        {
+            m_observedSelectable = bufferToObserve;
+        }
+        
+        public bool IsWithinSelectionBounds(GameObject gameObject, Vector3 cursorScreenPos)
+        {
             Bounds viewportBounds =
-                Utils.GetViewportBounds(camera, m_mousePosition1, Input.mousePosition);
+                Utils.GetViewportBounds(camera, m_cursorPosition, cursorScreenPos);
 
             return viewportBounds.Contains(
                 camera.WorldToViewportPoint(gameObject.transform.position));

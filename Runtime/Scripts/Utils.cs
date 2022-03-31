@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace EntSelect
+namespace UnitSelectionPackage
 {
     /// <summary>
     /// <see cref="https://hyunkell.com/blog/rts-style-unit-selection-in-unity-5/"/>
