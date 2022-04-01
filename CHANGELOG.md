@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.1.0...1.1.1) (2022-04-01)
+
+
+### Bug Fixes
+
+* fix GameManager could be updated after unity ([66b64ee](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/66b64ee61b44f21b0714b8965e7cca2d8be6f42c))
+
 # [1.1.0](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.0.0...1.1.0) (2022-03-31)
 
 
