@@ -48,17 +48,17 @@ public class Unit : MonoBehaviour, ISelectable
 {
     private bool m_isSelected = false;
     private Material m_material;
-    private ETeam m_team;
+    public ETeam team;
 
     private void OnEnable()
     {
-        GameManager.Instance.RegisterUnit(m_team, this);
+        GameManager.Instance.RegisterUnit(team, this);
     }
 
     private void OnDisable()
     {
         if(gameObject.scene.isLoaded)
-            GameManager.Instance.UnregisterUnit(m_team, this);
+            GameManager.Instance.UnregisterUnit(team, this);
     }
 
     protected void Awake()
