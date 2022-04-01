@@ -3,7 +3,7 @@
 
 ### Features
 
-* v2 ([9943985](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/9943985a34e0877d3f479e2d77720792a3707f1e))
+* rename namespace and add input and observed object as input ([9074f1d](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/9074f1d8173cd6a3aa7dceeca788a4b9fa9a1f56))
 
 # 1.0.0 (2022-03-20)
 
@@ -14,43 +14,3 @@
 
 # Changelog
 All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-### Added
--
-- 
-
-### Changed
--
--
-
-### Fixed
--
--
-
-### Removed
--
--
-
-## [1.0.0] - 2017-06-20
-### Added
--
-- 
-
-### Changed
--
--
-
-### Fixed
--
--
-
-### Removed
--
--
-
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.3.0...v1.0.0
