@@ -37,20 +37,28 @@ To use it, create a base class for you entities that inheriting from interface I
 using UnitSelectionPackage;
 using UnityEngine;
 
+public enum ETeam : int
+{
+    Team1 = 0,
+    Team2 = 1,
+    [InspectorName(null)] TeamCount = 2
+}
+
 public class Unit : MonoBehaviour, ISelectable
 {
     private bool m_isSelected = false;
     private Material m_material;
+    private ETeam m_team;
 
     private void OnEnable()
     {
-        GameManager.Instance.RegisterUnit(team, this);
+        GameManager.Instance.RegisterUnit(m_team, this);
     }
 
     private void OnDisable()
     {
         if(gameObject.scene.isLoaded)
-            GameManager.Instance.UnregisterUnit(team, this);
+            GameManager.Instance.UnregisterUnit(m_team, this);
     }
 
     protected void Awake()
@@ -77,13 +85,6 @@ Finally, you need to integrate it into your game logic. You need to call into yo
 using System.Collections.Generic;
 using UnitSelectionPackage;
 using UnityEngine;
-
-public enum ETeam : int
-{
-    Team1 = 0,
-    Team2 = 1,
-    [InspectorName(null)] TeamCount = 2
-}
 
 public class GameManager : MonoBehaviour
 {
