@@ -70,7 +70,7 @@ namespace UnitSelectionPackage
         public void DrawGUI(Vector3 cursorScreenPos)
         {
             // Create a rect from both cursor positions
-            Rect rect = Utils.GetScreenRect(m_cursorPosition, cursorScreenPos);
+            Rect rect = GetScreenRect(cursorScreenPos);
             Utils.DrawScreenRect(rect, style.fillColor);
             Utils.DrawScreenRectBorder(rect, style.thickness, style.edgeColor);
         }
@@ -82,11 +82,20 @@ namespace UnitSelectionPackage
         
         public bool IsWithinSelectionBounds(Camera camera, GameObject gameObject, Vector3 cursorScreenPos)
         {
-            Bounds viewportBounds =
-                Utils.GetViewportBounds(camera, m_cursorPosition, cursorScreenPos);
+            Bounds viewportBounds = GetViewportBounds(camera, cursorScreenPos);
 
             return viewportBounds.Contains(
                 camera.WorldToViewportPoint(gameObject.transform.position));
+        }
+        
+        public Rect GetScreenRect(Vector3 cursorScreenPo)
+        {
+            return Utils.GetScreenRect(m_cursorPosition, cursorScreenPo);
+        }
+        
+        public Bounds GetViewportBounds(Camera camera, Vector3 cursorScreenPos)
+        {
+            return Utils.GetViewportBounds(camera, m_cursorPosition, cursorScreenPos);
         }
     }
 }
