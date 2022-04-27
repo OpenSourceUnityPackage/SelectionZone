@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.2.0...1.2.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* fix typo ([b0807c0](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/b0807c05fbe99a74bfb9ee79920c5f2ec83f3a9d))
+
 # [1.2.0](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.1.1...1.2.0) (2022-04-26)
 
 
