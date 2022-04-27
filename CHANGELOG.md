@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.1.1...1.2.0) (2022-04-26)
+
+
+### Features
+
+* extract and expose screen rect and viewport bound functions ([332569b](https://github.com/OpenSourceUnityPackage/SelectionZone/commit/332569bfb260fc5648bdef50459442a39ef5f530))
+
 ## [1.1.1](https://github.com/OpenSourceUnityPackage/SelectionZone/compare/1.1.0...1.1.1) (2022-04-01)
 
 
