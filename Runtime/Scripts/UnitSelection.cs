@@ -88,11 +88,11 @@ namespace UnitSelectionPackage
                 camera.WorldToViewportPoint(gameObject.transform.position));
         }
         
-        public Rect GetScreenRect(Vector3 cursorScreenPo)
+        public Rect GetScreenRect(Vector3 cursorScreenPos)
         {
-            return Utils.GetScreenRect(m_cursorPosition, cursorScreenPo);
+            return Utils.GetScreenRect(m_cursorPosition, cursorScreenPos);
         }
-        
+
         public Bounds GetViewportBounds(Camera camera, Vector3 cursorScreenPos)
         {
             return Utils.GetViewportBounds(camera, m_cursorPosition, cursorScreenPos);
